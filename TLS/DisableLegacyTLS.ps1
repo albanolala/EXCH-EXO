@@ -7,14 +7,14 @@ $SSL3MainKey = "HKLM:\System\CurrentControlSet\Control\SecurityProviders\SCHANNE
 New-Item "$SSL3MainKey\Client\" -Force
 Set-ItemProperty "$SSL3MainKey\Client\" -Name "DisabledByDefault" -Value 1 -Type Dword
 Set-ItemProperty "$SSL3MainKey\Client" -Name "Enabled" -Value 0 -Type Dword
-Write-host "Ho disabilitato SSLV3 su registry key CLIENT e questi sono i risultati:" -ForegroundColor red
+Write-host "I have disabled SSLV3 on CLIENT registry key and these are the results:" -ForegroundColor red
 get-ItemProperty "$SSL3MainKey\Client\"
 
 
 New-Item "$SSL3MainKey\Server\" -Force
 Set-ItemProperty "$SSL3MainKey\Server\" -Name "DisabledByDefault" -Value 1 -Type Dword
 Set-ItemProperty "$SSL3MainKey\Server\" -Name "Enabled" -Value 0 -Type Dword
-Write-host "Ho disabilitato SSLV3 su registry key SERVER e questi sono i risultati:" -ForegroundColor red
+Write-host "I have disabled SSLV3 on Server registry key and these are the results:" -ForegroundColor red
 get-ItemProperty "$SSL3MainKey\Server\"
 #### End Disable SSL3.0 ####
 
@@ -26,14 +26,14 @@ $SSL2MainKey = "HKLM:\System\CurrentControlSet\Control\SecurityProviders\SCHANNE
 New-Item "$SSL2MainKey\Client\" -Force
 Set-ItemProperty "$SSL2MainKey\Client\" -Name "DisabledByDefault" -Value 1 -Type Dword
 Set-ItemProperty "$SSL2MainKey\Client\" -Name "Enabled" -Value 0 -Type Dword
-Write-host "Ho disabilitato SSLV2 su registry key CLIENT e questi sono i risultati:" -ForegroundColor red
+Write-host "I have disabled SSLV2 on CLIENT registry key and these are the results:" -ForegroundColor red
 get-ItemProperty "$SSL2MainKey\Client\"
 
 
 New-Item "$SSL2MainKey\Server\" -Force
 Set-ItemProperty "$SSL2MainKey\Server\" -Name "DisabledByDefault" -Value 1 -Type Dword
 Set-ItemProperty "$SSL2MainKey\Server\" -Name "Enabled" -Value 0 -Type Dword
-Write-host "Ho disabilitato SSLV2 su registry key Server e questi sono i risultati:" -ForegroundColor red
+Write-host "I have disabled SSLV2 on CLIENT registry key and these are the results:" -ForegroundColor red
 get-ItemProperty "$SSL3MainKey\Server\"
 
 #### End Disable SSL2.0 ####
@@ -46,14 +46,14 @@ $TLS1MainKey = "HKLM:\System\CurrentControlSet\Control\SecurityProviders\SCHANNE
 New-Item "$TLS1MainKey\Client\" -Force
 Set-ItemProperty "$TLS1MainKey\Client\" -Name "DisabledByDefault" -Value 1 -Type Dword
 Set-ItemProperty "$TLS1MainKey\Client\" -Name "Enabled" -Value 0 -Type Dword
-Write-host "Ho disabilitato TLS1.0 su registry key CLIENT e questi sono i risultati:" -ForegroundColor red
+Write-host "I have disabled TLS1.0 on CLIENT registry key and these are the results:" -ForegroundColor red
 get-ItemProperty "$TLS1MainKey\Client\"
 
 
 New-Item "$TLS1MainKey\Server\" -Force
 Set-ItemProperty "$TLS1MainKey\Server\" -Name "DisabledByDefault" -Value 1 -Type Dword
 Set-ItemProperty "$TLS1MainKey\Server\" -Name "Enabled" -Value 0 -Type Dword
-Write-host "Ho disabilitato TLS1.0 su registry key SERVER e questi sono i risultati:" -ForegroundColor red
+Write-host "I have disabled TLS1.0 on Server registry key and these are the results:" -ForegroundColor red
 get-ItemProperty "$TLS1MainKey\Server\"
 #### End Disable TLS1.0 ####
 
@@ -64,13 +64,13 @@ $TLS11MainKey = "HKLM:\System\CurrentControlSet\Control\SecurityProviders\SCHANN
 New-Item "$TLS11MainKey\Client\" -Force
 Set-ItemProperty "$TLS11MainKey\Client\" -Name "DisabledByDefault" -Value 1 -Type Dword
 Set-ItemProperty "$TLS11MainKey\Client\" -Name "Enabled" -Value 0 -Type Dword
-Write-host "Ho disabilitato TLS1.1 su registry key CLIENT e questi sono i risultati:" -ForegroundColor red
+Write-host "I have disabled TLS1.1 on CLIENT registry key and these are the results:" -ForegroundColor red
 get-ItemProperty "$TLS11MainKey\Client\"
 
 New-Item "$TLS11MainKey\Server\" -Force
 Set-ItemProperty "$TLS11MainKey\Server\" -Name "DisabledByDefault" -Value 1 -Type Dword
 Set-ItemProperty "$TLS11MainKey\Server\" -Name "Enabled" -Value 0 -Type Dword
-Write-host "Ho disabilitato TLS1.1 su registry key Server e questi sono i risultati:" -ForegroundColor red
+Write-host "I have disabled TLS1.1 on Server registry key and these are the results:" -ForegroundColor red
 get-ItemProperty "$TLS11MainKey\Server\"
 #### End Disable TLS1.1 ####
 
@@ -101,6 +101,8 @@ if (!(Test-Path -Path $registryPath) -or $checkValueClient.DisabledByDefault -ne
     [void] (Set-ItemProperty -Path $client -Name $name1 -Value $value1 -Type DWORD -Force)
     [void] (Set-ItemProperty -Path $server -Name $name -Value $value -Type DWORD -Force)
     [void] (Set-ItemProperty -Path $server -Name $name1 -Value $value1 -Type DWORD -Force)
+    
+    Write-host "Finished creating keys and DWORD values for TLS 1.2" -ForeGroundColor Green
 }
 
 Else
