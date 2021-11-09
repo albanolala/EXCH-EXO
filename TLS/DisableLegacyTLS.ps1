@@ -76,6 +76,8 @@ get-ItemProperty "$TLS11MainKey\Server\"
 
 
 ### Check TLS 1.2 Registry Key, create key and DWORD Values if doesn't exist ###
+Write-host "Checking TLS 1.2 Key and related DWORD values configuration" -ForegroundColor red
+
 $registryPath = 'HKLM:\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2'
 $name = "DisabledByDefault"
 $value = "0"
