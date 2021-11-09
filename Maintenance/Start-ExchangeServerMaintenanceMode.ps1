@@ -1,23 +1,6 @@
 <#
 .Synopsis
-   Script to automatically put an Exchange 2013 Server into Maintenance Mode.
-
-   Current Version: 1.8
-
-   Version History:
-   ----------------
-   v1.8: fixed copy/paste bug (AGAIN!); removed code twice; made some overall improvements while at it :-)
-   v1.7: removed the need to dot-source the script first
-   v1.6: bugfixes in the pre-run checks
-   v1.5: included code to restart transport services after changing component state, included check for Exchange 2013 server
-         General code improvements. Better remoting support (script can now be executed from a remote server, even for DAG members)
-         Better error-handling, improved logic
-   v1.4: included additional error handling. Script will now check for local Admin rights and try to resolve the TargetServerFQDN. 
-         If not an error is thrown and the script execution aborted.
-   v1.3: included code to redirect messages from the server that is to be put in maintenance mode to another server.
-   v1.2: included code to exclude poision a Shadow Redundancy queue when checking if all queues were empty
-
-
+   Script to automatically put an Exchange Server into Maintenance Mode.
 
 .DESCRIPTION
    This script is created to automatically put an Exchange 2013 Server into Maintenance Mode. 
