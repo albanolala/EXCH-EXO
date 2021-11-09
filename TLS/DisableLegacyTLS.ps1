@@ -74,6 +74,25 @@ Write-host "I have disabled TLS1.1 on Server registry key and these are the resu
 get-ItemProperty "$TLS11MainKey\Server\"
 #### End Disable TLS1.1 ####
 
+# Check TLS 1.2 Registry Key, create key and DWORD Values if doesn't exist
+
+$registryPath = 'HKLM:\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2'
+$name = "DisabledByDefault"
+$value = "0"
+$name1 = "Enabled"
+$value1 = "1"
+
+if (!(Test-Path -Path $registryPath)) {
+    [void] (New-Item -Path $registryPath -Force)
+    [void] (New-ItemProperty -Path $registryPath -Name $name -Value $value -PropertyType DWORD -Force)
+    [void] (New-ItemProperty -Path $registryPath -Name $name1 -Value $value1 -PropertyType DWORD -Force)
+}
+
+Else
+{
+    Write-host "Key and related DWORD values exists" -ForegroundColor Green
+}
+
 
 Write-host "Done! Disabled ALL Legacy TLS Protocols" -ForegroundColor Red
 
