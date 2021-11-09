@@ -76,7 +76,7 @@ get-ItemProperty "$TLS11MainKey\Server\"
 
 
 
-# Check TLS 1.2 Registry Key, create key and DWORD Values if doesn't exist
+### Check TLS 1.2 Registry Key, create key and DWORD Values if doesn't exist ###
 
 $registryPath = 'HKLM:\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2'
 $client = "HKLM:\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\client"
@@ -107,6 +107,8 @@ Else
 {
     Write-host "Key and related DWORD values exists" -ForegroundColor Green
 }
+
+### End TLS 1.2 Checks ###
 
 
 Write-host "Done! Disabled ALL Legacy TLS Protocols, and enabled only TLS 1.2 Protocol" -ForegroundColor Red
