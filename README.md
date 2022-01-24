@@ -1,4 +1,4 @@
-# Exchange On-Premises Scripts
+# EXCH/EXO Scripts
 
 *This series of Exchange On-Premises scripts will help you with your management activities. This code is without mine or Microsoft's garranty. Execution and management of this series of scripts is therefore under your direct responsibility.*
 
