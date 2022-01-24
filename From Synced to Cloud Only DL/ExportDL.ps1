@@ -7,6 +7,8 @@ function Export-DistributionGroup2Cloud
       .DESCRIPTION
       Copies attributes of a synchronized group to a placeholder group and CSV file.
       After initial export of group attributes, the on-premises group can have the attribute "AdminDescription" set to "Group_NoSync" which will stop it from be synchronized.
+      So before proceeding with the "finalize" switch of the DL you'll need to stop syncing the DL from the On-Premises Directory, in this way you can add all SMTP Addresses to the DL in Cloud.
+      Before finalizing you have to be sure about the SMTP Flow from your On-Premises organization to Exchange Online!!
       The "-Finalize" switch can then be used to write the addresses to the new group and convert the name.  The final group will be a cloud group with the same attributes as the previous but with the additional ability of being able to be "self-managed".
       Once the contents of the new group are validated, the on-premises group can be deleted.
 
