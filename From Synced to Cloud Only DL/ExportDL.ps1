@@ -441,7 +441,7 @@ function Export-DistributionGroup2Cloud
         break
       }
 
-      $NewDGName = $TempDG.Name.Replace('Cloud-','-')
+      $NewDGName = $TempDG.Name.Replace('Cloud-','')
       $NewDGDisplayName = $TempDG.DisplayName.Replace('Cloud-','')
       $NewDGAlias = $TempDG.Alias.Replace('Cloud-','')
 
