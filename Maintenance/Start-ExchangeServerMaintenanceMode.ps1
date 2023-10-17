@@ -1,6 +1,6 @@
 <#
 .Synopsis
-   Script to automatically put an Exchange 2013/2016/2019/2016/2019 Server into Maintenance Mode.
+   Script to automatically put an Exchange 2013/2016/2019 into Maintenance Mode.
 
 
 .DESCRIPTION
@@ -11,7 +11,7 @@
    Running the following command will place a server called "Server1" into Maintenance Mode and move any messages in transit from that server to "Server2".
    Please note that the TargetServer value has to be a FQDN!
 
-   Start-ExchangeServerMaintenanceMode.ps1 -Server Server1 -TargetServerFQDN Server2.domain.com
+   Start-ExchangeServerMaintenanceMode.ps1 -Server Server1 -TargetServerFQDN Server2
 #>
 
 [CmdletBinding()]
