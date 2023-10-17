@@ -1,9 +1,10 @@
 <#
 .Synopsis
-   Script to automatically put an Exchange Server into Maintenance Mode.
+   Script to automatically put an Exchange 2013/2016/2019/2016/2019 Server into Maintenance Mode.
+
 
 .DESCRIPTION
-   This script is created to automatically put an Exchange 2013 Server into Maintenance Mode. 
+   This script is created to automatically put an Exchange 2013/2016/2019 Server into Maintenance Mode. 
    It will automatically detect if the server is a Mailbox Server and then take appropriate additional actions, if any.
 
 .EXAMPLE
@@ -90,9 +91,9 @@ If (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 }
 
 
-#check if the server is an Exchange 2013 server
+#check if the server is an Exchange 2013/2016/2019/2016/2019 server
 if($discoveredServer.AdminDisplayVersion.Major -ne "15"){
-    Write-Warning "The specified Exchange Server is not an Exchange 2013 server!"
+    Write-Warning "The specified Exchange Server is not an Exchange 2013/2016/2019/2016/2019 server!, try to type again the correct hostname"
     Write-Warning "Aborting script..."
     Break
 }
@@ -101,7 +102,7 @@ else{
     if($discoveredServer.IsHubTransportServer -eq $True){
         if(-NOT ($TargetServerFQDN)){
             Write-Warning "TargetServerFQDN is required."
-            $TargetServerFQDN = Read-Host -Prompt "Please enter the TargetServerFQDN: "
+            $TargetServerFQDN = Read-Host -Prompt "Please enter the Queues TargetServerFQDN: "
         }
         
         #Get the FQDN of the Target Server through DNS, even if the input is just a host name
@@ -149,14 +150,53 @@ else{
         if(Invoke-Command -ComputerName $Server {Restart-Service MSExchangeFrontEndTransport | Out-Null}){
             Write-Host "INFO: Successfully restarted MSExchangeFrontEndTransport service" -ForegroundColor Yellow
         }
-        Write-Host ""
-        #Write-Host "INFO: Done! Server $Server is put succesfully into maintenance mode!" -ForegroundColor Green
+        
+       
     }
+
+    ## Checking Mounted Databases ##
     while(($mountedDB = checkMountedDB) -ne 0){
         Write-Host -ForegroundColor Yellow "Waiting for DB's to complete the move process... Number of DB's still mounted on Server $($Server) is $($MountedDB)"
-        # Get-MailboxDatabaseCopyStatus -Server $Server | ? {$_.Status -eq "Mounted" }
-        Sleep 5
+        Get-MailboxDatabaseCopyStatus -Server $Server | ? {$_.Status -eq "Mounted"}
+        Sleep 10
+
+        #Dismount Databases not replicated in other DAG Members, those are still mounted
+        Write-Host "INFO: Dismounting databases not replicated in DAG Members!" -ForegroundColor Yellow
+        $DBs = Get-MailboxDatabaseCopyStatus | Where-Object {$_.status -eq "mounted"}
+        
+        
+        Foreach ($DB in $DBS)
+        {
+         $statusDB = (get-mailboxdatabase $DB.DatabaseName).replicationtype
+         if ($StatusDB -eq "none")
+         {
+           Dismount-Database $DB.databasename -Confirm:$false
+         }
+        }
+    }
+
+
+    #Stop FrontEndTrasport
+    write-host "INFO: Waiting 10 seconds before STOPPING and DISABLING MSExchangeFrontEndTransport" -ForegroundColor Yellow
+    Start-Sleep -Seconds 10
+    Write-Host "INFO: Stopping and Disabling MSExchangeFrontEndTransport Node:"$Server -ForegroundColor Red
+    Stop-Service MSExchangeFrontEndTransport
+    Set-Service MSExchangeFrontEndTransport -StartupType Disabled
+    
+  $ip = Get-NetIPConfiguration
+  $ipv4 = $ip.IPv4Address.ipaddress + ":443"
+  $i = (netstat -an | findstr /c:$ipv4 | findstr ESTABLISHED).count
+
+    while ($i -gt 10)
+    {
+    $ip = Get-NetIPConfiguration
+
+     $activeConnections = (netstat -an | findstr /c:$ipv4 | findstr ESTABLISHED).count
+     write-host "Ci sono ancora" $activeConnections "connessioni, attendere" -ForeGroundColor Red
+    
     }
     Write-Host ""
-    Write-Host "INFO: Done! Server $Server is put succesfully into maintenance mode!" -ForegroundColor Green
+    Write-Host "INFO: Done! Server $server successfully taken in Maintenance Mode." -ForegroundColor Green
+    Write-Host ""
+ 
 }
