@@ -1,3 +1,21 @@
+####################################################################################################################################################################
+#  SCRIPT DETAILS                                                                                                                                                  #
+#    Configures internal and external urls of Exchange CAS Server/s vDirs                                                                                          #
+#                                                                                                                                                                  #
+#																				   #
+# OTHER SCRIPT INFORMATION																	   #
+#    Rights Required	: Local admin on server															   #
+#    Exchange Version	: 2019																	   #
+#    Disclaimer   		: You are on your own.  This was not written by, supported by, or endorsed by Microsoft.      					   #
+#                                                                                                                                                                  #
+#    					                                                                                                                           #
+#																				   #
+# EXECUTION																			   #
+#  .\ConfigureVirtualDirUrls.ps1 -InternalURL mail.contoso.com -ExternalURL mail.contoso.com -Server server1,server3 -AutodiscoverSCP autodiscover.contoso.com	   #
+#																				   #
+####################################################################################################################################################################
+
+
 [CmdletBinding()]
 param(
 	[Parameter( Position=0,Mandatory=$true)]
