@@ -4,8 +4,9 @@
 #                                                                                                                                                                  #
 #																				   #
 # OTHER SCRIPT INFORMATION																	   #
-#    Rights Required	: Local admin on server															   #
-#    Exchange Version	: 2019																	   #
+#    Rights Required	: Admin on CAS Server															   #
+#    Exchange Version	: 2016/2019                                                                                                                                #
+#    Shell : Exchange Management Shell (Not Windows powershell, you'll need to leverage Exchange PS Module)                                                        #
 #    Disclaimer   		: You are on your own.  This was not written by, supported by, or endorsed by Microsoft.      					   #
 #                                                                                                                                                                  #
 #    					                                                                                                                           #
