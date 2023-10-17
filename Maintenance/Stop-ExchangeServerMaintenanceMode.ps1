@@ -1,3 +1,18 @@
+<#
+.Synopsis
+   Script to automatically take an Exchange 2013/2016/2019 Server out of Maintenance Mode.
+
+.DESCRIPTION
+   This script is created to automatically take an Exchange 2013 Server out of Maintenance Mode. 
+   It will automatically detect if the server is a Mailbox Server and then take appropriate additional actions, if any.
+
+   To execute the script, you will have to dot-source it first after which you can call the cmdlet: "Stop-ExchangeServerMaintenanceMode"
+.EXAMPLE
+   Running the following command will take a server called "Server1" out of Maintenance Mode:
+
+   Stop-ExchangeServerMaintenanceMode.ps1 -Server Server1
+#>
+
 [CmdletBinding()]
 [OutputType([int])]
 Param
@@ -46,7 +61,7 @@ if($discoveredServer.IsHubTransportServer -eq $true){
     }
     
     Write-Host "INFO: Resuming Transport Service..." -ForegroundColor Yellow
-    Set-ServerComponentState –Identity $Server -Component HubTransport -State Active -Requester Maintenance
+    Set-ServerComponentState -Identity $Server -Component HubTransport -State Active -Requester Maintenance
 
     Write-Host "INFO: Restarting the MSExchangeTransport Service on server $Server..." -ForegroundColor Yellow
     Invoke-Command -ComputerName $Server {Restart-Service MSExchangeTransport} | Out-Null
@@ -56,8 +71,50 @@ if($discoveredServer.IsHubTransportServer -eq $true){
 #restart FE Transport Services if server is also CAS
 if($discoveredServer.IsFrontendTransportServer -eq $true){
     Write-Host "INFO: Restarting the MSExchangeFrontEndTransport Service on server $Server..." -ForegroundColor Yellow
+    Set-Service MSExchangeFrontEndTransport -StartupType Automatic
     Invoke-Command -ComputerName $Server {Restart-Service MSExchangeFrontEndTransport} | Out-Null
 }
+ 
+ $server = hostname
+ Write-Host "INFO: Restarting the MSExchangeFrontEndTransport Service on server $Server..." -ForegroundColor Yellow
+
+
+# Check Stopped Services
+function CheckServices(){
+   $i = 0
+   $i = (get-wmiobject "Win32_Service" -ComputerName srvmail01 -ErrorAction SilentlyContinue | where {$_.name -like "MsExchange*" -and $_.name -notlike "edgeupdate" -and $_.name -notlike "MSExchangeDiagnostics" -and $_.name -NotLike "clr_optimization*" -and $_.startmode -eq 'Auto' -and $_.state -eq "stopped"}).count
+   return $i
+}
+
+
+ 
+Write-Host "INFO: Checking Stopped Services in automatic Startup" -ForegroundColor Yellow
+while (($StoppedServices = CheckServices) -ne 0)
+{
+get-wmiobject "Win32_Service" -ComputerName $server -ErrorAction SilentlyContinue | where {$_.name -NotLike "clr_optimization*" -and $_.startmode -eq 'Auto' -and $_.state -eq "stopped"} | select-object Name | Get-Service -ComputerName $server | start-service | out-null
+start-sleep -Seconds 10
+}
+
+
+## Mount Databases not replicated in other DAG Members, those are still mounted
+        Write-Host "INFO: Mounting, not mounted databases not replicated in DAG Members!" -ForegroundColor Yellow
+        $DBs = $NULL
+        $DBs = Get-MailboxDatabaseCopyStatus | Where-Object {$_.status -eq "Dismounted"}
+        
+        
+        Foreach ($DB in $DBS)
+        {
+         $statusDB = (get-mailboxdatabase $DB.DatabaseName).replicationtype
+         if ($DBs -ne $NULL -and $statusDB -eq "none")
+         {
+           Mount-Database $DB.databasename -Confirm:$false
+           write-host "INFO: Mounted Database" $db.DatabaseName -ForeGroundColor Green
+         }
+         else 
+         {
+           write-host "INFO: All Databases not replicated in other Dag members are mounted!" -ForegroundColor Yellow
+         }
+        }
 
 Write-Host ""
 Write-Host "INFO: Done! Server $server successfully taken out of Maintenance Mode." -ForegroundColor Green
