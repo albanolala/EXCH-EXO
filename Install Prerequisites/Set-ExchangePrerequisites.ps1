@@ -3,34 +3,9 @@
 #    Installs all required prerequisites for Exchange Server 2019 for Windows Server 2019 components                                                               #
 #        downloading latest Update Roll-up, etc.                                                                                                                   #
 #																				   #
-# SCRIPT VERSION HISTORY																	   #
-#    Current Version	: 1.19                                                                                                                                     #										
-#    Change Log	        : 1.19 - SSL 3.0 check - fixed code (thanks for Dimitris)                                                                                  #
-#                       : 1.18 - Updated Defender exclusions, per Microsoft docs.                                                                                  # 
-#                       : 1.17 - Added support for Windows Server 2022 and added IIS URL Rewrite module installation check                                         #
-#                       : 1.16 - Added checks for IIS rewrite and Universal C, code cleanup and added more commenting in the code.                                 #
-#                       : 1.15 - Added IIS URL Rewrite and Universal C Runtime in Windows (KB2999226)                                                              #
-#                       : 1.14 - Better TLS checks, remove TLS 1.0/1.1, make TLS 1.2 default, SMBv1 removal, RSS enabled, Pagefile Fix                             #
-#                       : 1.13 - Minor syntax fixes                                                                                                                #
-#                       : 1.12 - Changed to .NET 4.8 only. Removed .NET 4.7.x.                                                                                     #
-#                       : 1.11 - Added Windows Defender options - Add, Clear and Report, fixed UCMA Core process waiting, re-arranged menu                         #
-#                       : 1.10 - Added .NET 4.8 as an Option (Will be default by the Fall of 2019) - CU2+, TCP Keep Alive Value, functions are alphabetized        #
-#                                Additional Checks function fix, fixed anomalies in various checks and functions                                                   #
-#                       : 1.09 - Changed Internet Check to alleviate issues found, Correct C++ 2012/2013 code, enhanced .NET check, pulled Windows Defender        #
-#                       : 1.08 - Fixed Windows defender option and published to Gallery                                                                            #
-#                       : 1.07 - Added new Pagefile (25%) change as well as RAM size check                                                                         #
-#                       : 1.06 - Bug fixes                                                                                                                         #
-#                       : 1.05 - RTM Support - split menu for Core/Full OS, Change requirements to install due to MS changes                                       #
-#                       : 1.04 - Fixed Windows Features, checks and event log resizing verification                                                                #
-#                       : 1.03 - Adding role prerequisite checks for Full/Core OS and Mailbox/Edge Transport Roles                                                 #
-#                       : 1.02 - Adding Core Role Installation and Event log changes                                                                               #
-#                       : 1.01 - More testing for Exchange 2019 Preview                                                                                            #																									   #
-#				        : 1.00 - First iteration (TAP)                                                                                             #
 #                                                                                                                                                                  #
-#     	 											                                                                   #
 #																				   #
 # OTHER SCRIPT INFORMATION																	   #
-#    Wish list			:               														   #
 #    Rights Required	: Local admin on server															   #
 #    Exchange Version	: 2019																	   #
 #    Disclaimer   		: You are on your own.  This was not written by, supported by, or endorsed by Microsoft.      					   #
@@ -38,7 +13,7 @@
 #    					                                                                                                                           #
 #																				   #
 # EXECUTION																			   #
-#  .\Set-Exchange2019Prerequisites-1.17.ps1															   #
+#  .\Set-ExchangePrerequisites.ps1.															           #
 #																				   #
 ####################################################################################################################################################################
 
